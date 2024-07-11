@@ -15,6 +15,8 @@ const AppointmentModel = sequelize.define(
     // PatientName : {
     //     type: DataTypes.STRING,
     // },
+
+    //hello! 
     AppointmentTime: {
       type: DataTypes.TIME,
       // allowNull defaults to true
