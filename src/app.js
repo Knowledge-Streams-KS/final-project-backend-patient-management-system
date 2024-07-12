@@ -13,9 +13,10 @@ myApp.use(express.json())
 myApp.use(AllRoutes);
 // Enable CORS
 myApp.use(cors({
-  origin: 'http://localhost:5173', // Adjust the port as necessary
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+  credentials: true,
+  //allowedHeaders: ['Content-Type']
 }));
 async function main() {
   await connectDB();
