@@ -10,11 +10,14 @@ const port = process.env.PORT
 
 myApp.use(express.json())
 //myApp.use(bodyParser.urlencoded({ extended: true }));
-myApp.use(AllRoutes);
+
 myApp.use(cors({
-  origin  : "http://localhost:5173",
-  methods : "POST"
+   origin  : "http://localhost:5173",
+  // methods : "POST"
+   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: 'Content-Type,Authorization'
 }))
+myApp.use(AllRoutes);
 async function main() {
   await connectDB();
   console.log("DB is connected")
