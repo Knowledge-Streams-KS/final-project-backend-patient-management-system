@@ -24,7 +24,9 @@ const PatientModel = sequelize.define(
     },
     medicalHistory : {
         type : DataTypes.TEXT
-    }
+    },
+  
+
   },
   {
     // Other model options go here
