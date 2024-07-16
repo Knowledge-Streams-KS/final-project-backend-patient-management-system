@@ -7,7 +7,8 @@ let key = process.env.secret_key
 const userAuthController = {
     SignUp: async (req, res) => {
         try {
-            const { name, email, role, password, confirmPassword, phoneNo } = req.body;
+            //role
+            const { name, email, password, confirmPassword, phoneNo } = req.body;
 
             // Check if email already exists 
             const userCheck = await UserModel.findOne({ where: { email: email } });
@@ -27,7 +28,7 @@ const userAuthController = {
             const user = await UserModel.create({
                 name,
                 email,
-                role,
+                // role,
                 password: hashedPassword,
                 confirmPassword: hashedPassword,
                 phoneNo
@@ -35,11 +36,11 @@ const userAuthController = {
             console.log(user);
 
             // Create user -> patient entry
-            if (role === 'patient') {
-                await PatientModel.create({ userId: user.id });
-            } else if (role === 'doctor') {
-                await DoctorModel.create({ userId: user.id });
-            }
+            // if (role === 'patient') {
+            //     await PatientModel.create({ userId: user.id });
+            // } else if (role === 'doctor') {
+            //     await DoctorModel.create({ userId: user.id });
+            // }
 
             return res.status(201).json({ message: "Registered successfully", data: user });
         } catch (error) {
