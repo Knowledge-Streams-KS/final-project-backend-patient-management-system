@@ -7,7 +7,6 @@ let key = process.env.secret_key
 const userAuthController = {
     SignUp: async (req, res) => {
         try {
-            //role
             const { name, email, password, confirmPassword, phoneNo } = req.body;
 
             // Check if email already exists 

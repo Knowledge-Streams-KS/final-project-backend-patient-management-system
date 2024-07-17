@@ -4,6 +4,7 @@ import PatientModel from '../PatientModel/index.js';
 import DoctorModel from '../DoctorModel/index.js';
 
 
+
 const AppointmentModel = sequelize.define(
   'Appointment',
   {
@@ -21,9 +22,9 @@ const AppointmentModel = sequelize.define(
       type: DataTypes.TIME,
       // allowNull defaults to true
     },
-    Department: {
-        type : DataTypes.STRING
-    },
+    // Department: {
+    //     type : DataTypes.STRING
+    // },
     hasVisited: {
       type: DataTypes.BOOLEAN
     },
