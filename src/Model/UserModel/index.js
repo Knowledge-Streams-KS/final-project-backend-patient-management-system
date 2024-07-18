@@ -29,10 +29,10 @@ const UserModel = sequelize.define(
         type: DataTypes.STRING,
         // allowNull:false
     },
-    // role: {
-    //     type: DataTypes.ENUM('patient', 'doctor', 'admin'),
-    //     allowNull: false,
-    //   },
+    role: {
+        type: DataTypes.ENUM('patient', 'doctor', 'admin'),
+        // allowNull: false,
+      },
    
     },
   
