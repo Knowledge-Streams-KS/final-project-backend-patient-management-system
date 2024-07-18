@@ -7,7 +7,7 @@ let key = process.env.secret_key
 const userAuthController = {
     SignUp: async (req, res) => {
         try {
-            const { name, email, password, confirmPassword, phoneNo } = req.body;
+            const { PatientName,DateOfBirth,gender,address,medicalHistory,name, email, role,password, confirmPassword, phoneNo } = req.body;
 
             // Check if email already exists 
             const userCheck = await UserModel.findOne({ where: { email: email } });
@@ -27,21 +27,25 @@ const userAuthController = {
             const user = await UserModel.create({
                 name,
                 email,
-                // role,
+                role,
                 password: hashedPassword,
                 confirmPassword: hashedPassword,
                 phoneNo
             });
             console.log(user);
-
-            // Create user -> patient entry
-            // if (role === 'patient') {
-            //     await PatientModel.create({ userId: user.id });
-            // } else if (role === 'doctor') {
-            //     await DoctorModel.create({ userId: user.id });
-            // }
-
-            return res.status(201).json({ message: "Registered successfully", data: user });
+               // If the user is a patient, create a new Patient document -> Patient Entry
+               if(role === 'patient') {
+                const patient = new PatientModel({
+                    PatientName,
+                    DateOfBirth,
+                    gender, 
+                    address,
+                    medicalHistory
+                })
+                await patient.save();
+             }
+             
+             return res.status(201).json({ message: "Registered successfully", data: user });
         } catch (error) {
             res.status(500).json({ Error: "Internal server error" });
             console.log(error);
@@ -73,6 +77,8 @@ const userAuthController = {
             // Generate JWT token
             const token = jwt.sign(tokenData, key, { expiresIn: '2h' });
             res.status(200).json({ message: "Login successful", token });
+
+             
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: "Internal server error" });
