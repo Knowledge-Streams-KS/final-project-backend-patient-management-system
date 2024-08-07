@@ -1,39 +1,26 @@
-import {  DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize';
 import sequelize from '../../db/config.js';
+import UserModel from '../UserModel/index.js';
 
-
-const PatientModel = sequelize.define(
-  'Patient',
-  {
-    // Model attributes are defined here
-    PatientName: {
-      type: DataTypes.STRING,
-      // allowNull: false,
-    },
-    DateOfBirth: {
-      type: DataTypes.DATE,
-      // allowNull defaults to true
-    },
-    gender: {
-      //  type :DataTypes.STRING,
-      type: DataTypes.ENUM(['Male', 'Female', 'Other']),
-       
-    },
-    address : {
-        type: DataTypes.STRING
-    },
-    medicalHistory : {
-        type : DataTypes.TEXT
-    },
-  
-
+const PatientModel = sequelize.define('Patient', {
+  PatientName: {
+    type: DataTypes.STRING,
+    allowNull: false,
   },
-  {
-    // Other model options go here
-
+  DateOfBirth: {
+    type: DataTypes.DATE,
+    allowNull: false,
   },
-);
+  gender: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  address: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
 
-// `sequelize.define` also returns the model
-//console.log(User === sequelize.models.User); // true
-export default PatientModel
+
+
+export default PatientModel;

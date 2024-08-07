@@ -9,8 +9,6 @@ PatientRouter.get("/GetSinglePatient/:id",PatientController.getSingle);
 
 PatientRouter.post("/AddPatients",PatientController.create);
 
-
-
 PatientRouter.delete("/DropPatientRecord/:id", PatientController.delete)
 
 export default PatientRouter;
