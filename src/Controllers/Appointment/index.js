@@ -10,11 +10,12 @@ const AppointmentController = {
   getAll: async (req, res) => {
     try {
       const getAllAppointments = await AppointmentModel.findAll({
+         where: { PatientId: patientId }, // Filter by patient ID
         include: [
-          // {
-          //   model: PatientModel,
-          //   attributes: ['PatientName'],
-          // },
+          {
+            model: PatientModel,
+            attributes: ['PatientName'],
+          },
           {
             model: DoctorModel,
             attributes: ['DoctorName'],
@@ -32,6 +33,41 @@ const AppointmentController = {
       res.status(500).json({ Error: 'Internal server error' });
     }
   },
+  getPatientAppointments: async (req, res) => {
+    try {
+      const { patientId } = req.params; // Expecting patient ID from the request params
+  
+      // Fetch appointments for the specific patient
+      const patientAppointments = await AppointmentModel.findAll({
+        where: { PatientId: patientId }, // Filter by patient ID
+        include: [
+          {
+            model: PatientModel,
+            attributes: ['PatientName'],
+          },
+          {
+            model: DoctorModel,
+            attributes: ['DoctorName'],
+          },
+          {
+            model: MedicalRecordModel,
+          }
+        ],
+      });
+  
+      if (patientAppointments.length === 0) {
+        return res.status(404).json({ Warning: `No appointments found for patient ID ${patientId}` });
+      }
+  
+      res.status(200).json({
+        Success: 'Get Patient Appointments Successfully',
+        AppointMentRecord: patientAppointments,
+      });
+    } catch (error) {
+      res.status(500).json({ Error: 'Internal server error' });
+    }
+  },
+  
   getSingle: async (req, res) => {
     try {
       const { id } = req.params;
@@ -48,13 +84,16 @@ const AppointmentController = {
     try {
       const id = req.params.id;
       const { AppointmentDate, AppointmentTime, PatientName, 
-        DoctorName, Department,hasVisited, medicalHistory} = req.body;
+        DoctorName,
+        Specialization, Department,hasVisited, medicalHistory} = req.body;
 
       // Find patient and doctor (with checks for existence)
      const patient = await PatientModel.findOne({ where: { PatientName : PatientName } });
-      const doctor = await DoctorModel.findOne({
+    let doctor = await DoctorModel.findOne({
         where: {
-          DoctorName: DoctorName
+          DoctorName: DoctorName,
+          Specialization:
+          Specialization
         }
       });
       if (!patient) {
@@ -62,7 +101,10 @@ const AppointmentController = {
       }
 
       if (!doctor) {
-        return res.status(400).json({ Error: 'Doctor not found' });
+       // return res.status(400).json({ Error: 'Doctor not found' });
+       doctor = await DoctorModel.create({ DoctorName,
+        Specialization
+       });
       }
       console.log("doctor name is", doctor)
 
@@ -72,12 +114,14 @@ const AppointmentController = {
       console.log('Doctor Object =>', doctor);
 
       // Build and save the appointment using patient and doctor IDs
-      const AddAppointment = AppointmentModel.build({
+      let AddAppointment = AppointmentModel.build({
         AppointmentDate,
         AppointmentTime,
         PatientName,
         PatientId: patient.id,  // Use patient ID
         DoctorId: doctor.id,    // Use doctor ID
+        DoctorName: doctor.DoctorName, // Use the doctor name from the model
+        Specialization,
         Department,
         hasVisited,
         medicalHistory
