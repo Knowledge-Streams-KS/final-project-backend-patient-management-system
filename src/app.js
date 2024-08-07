@@ -13,19 +13,10 @@ myApp.use(express.json())
 
 myApp.use(cors({
    origin  : "http://localhost:5173",
-  // methods : "POST"
+
    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: 'Content-Type,Authorization'
 }))
-// Enable CORS
-// myApp.use(cors({
-//   origin: 'http://localhost:5173',
-//   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-//   credentials: true,
-//   allowedHeaders: 'Content-Type'
-// }));
-//you must enable cors before routing or u'll face CORS errors!
-
 
 
 myApp.use(AllRoutes);
